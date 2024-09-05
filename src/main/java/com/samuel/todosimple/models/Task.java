@@ -13,7 +13,6 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    @NotBlank
     private Long id;
 
     @ManyToOne
