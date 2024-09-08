@@ -22,6 +22,11 @@ public class UserService {
         ));
     }
 
+    public List<User> findAll() {
+        List<User> users = userRepository.findAll();
+        return users;
+    }
+
     @Transactional
     public User create(User obj) {
         obj.setId(null);

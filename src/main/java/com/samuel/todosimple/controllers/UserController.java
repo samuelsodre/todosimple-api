@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -23,6 +24,12 @@ public class UserController {
     public ResponseEntity<User> findById(@PathVariable Long id) {
         User user = this.userService.findById(id);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/all-users")
+    public ResponseEntity<List<User>> findAll() {
+        List<User> users = userService.findAll();
+        return ResponseEntity.ok(users);
     }
 
     @PostMapping
