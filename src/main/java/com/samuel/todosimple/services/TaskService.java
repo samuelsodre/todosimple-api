@@ -3,6 +3,8 @@ package com.samuel.todosimple.services;
 import com.samuel.todosimple.models.Task;
 import com.samuel.todosimple.models.User;
 import com.samuel.todosimple.repositories.TaskRepository;
+import com.samuel.todosimple.services.exceptions.DataBindingViolationException;
+import com.samuel.todosimple.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +22,7 @@ public class TaskService {
 
     public Task findById(Long id) {
         Optional<Task> task = this.taskRepository.findById(id);
-        return task.orElseThrow(() -> new RuntimeException(
+        return task.orElseThrow(() -> new ObjectNotFoundException(
                 "Task não encontrada. Id: " + id + ", Tipo: " + Task.class.getName()
         ));
     }
@@ -47,7 +49,12 @@ public class TaskService {
     }
 
     public void delete(Long id) {
-        Task task = findById(id);
-        this.taskRepository.deleteById(task.getId());
+        findById(id);
+        try {
+            this.taskRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new DataBindingViolationException("Não é possível excluir pois há entidades relacionadas.");
+        }
+
     }
 }
